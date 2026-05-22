@@ -1,0 +1,121 @@
+Tugas Kelompok 6<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Coding: Manipulasi Elemen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        h2 { margin-top: 20px; color: #333; }
+
+        /* Area simulasi tempat kotak bergerak */
+        #area-simulasi {
+            width: 100%;
+            height: 350px;
+            position: relative;
+            background-color: #ffffff;
+            border-bottom: 5px dashed #ff4d4d; /* Lantai batas beban */
+            overflow: hidden;
+        }
+
+        /* Kotak beban yang akan dimanipulasi */
+        #kotak-beban {
+            width: 120px;
+            height: 120px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            
+            /* Posisi awal kotak */
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px; 
+            
+            /* Efek transisi agar gerakan naik/turun terlihat mulus */
+            transition: top 0.2s ease-out, background-color 0.5s;
+        }
+
+        /* Area input di bagian bawah */
+        #input-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2> Simulasi Beban Pikiran</h2>
+    
+    <div id="area-simulasi">
+        <div id="kotak-beban">Pikiran</div>
+    </div>
+
+    <div id="input-container">
+        <p>Ketikkan beban pikiranmu di bawah ini:</p>
+        <input type="text" id="input-pikiran" placeholder="Tulis sesuatu di sini...">
+        <p>Berat Beban: <span id="indikator-berat">0</span> kg</p>
+    </div>
+
+    <script>
+        // 1. Mengambil elemen HTML berdasarkan ID (DOM Selection)
+        const inputPikiran = document.getElementById('input-pikiran');
+        const kotakBegan = document.getElementById('kotak-beban');
+        const indikatorBerat = document.getElementById('indikator-berat');
+
+        // 2. Mendengarkan setiap ketikan user pada input (Event Listener)
+        inputPikiran.addEventListener('input', function() {
+            // Hitung panjang string/kalimat yang diketik
+            const jumlahKarakter = inputPikiran.value.length;
+            
+            // Batasi pergerakan maksimal agar kotak tidak keluar dari area simulasi
+            const batasMaksimalTurun = 220; 
+            
+            // Logika kalkulasi jarak turun (tiap 1 karakter = turun 3 pixel)
+            let posisiTop = 10 + (jumlahKarakter * 3);
+            
+            // Mencegah posisi melampaui batas bawah
+            if (posisiTop > batasMaksimalTurun) {
+                posisiTop = batasMaksimalTurun;
+            }
+
+            // 3. MANIPULASI ELEMEN (Mengubah CSS style secara real-time)
+            kotakBegan.style.top = posisiTop + 'px';
+            
+            // Bonus: Mengubah teks indikator berat & warna kotak jika terlalu berat
+            indikatorBerat.innerText = jumlahKarakter;
+            
+            if (jumlahKarakter > 40) {
+                kotakBegan.style.backgroundColor = '#e74c3c'; // Merah jika berat
+                kotakBegan.innerText = "OVERLOAD";
+            } else {
+                kotakBegan.style.backgroundColor = '#3498db'; // Biru normal
+                kotakBegan.innerText = "Pikiran";
+            }
+        });
+    </script>
+
+</body>
+</html>
